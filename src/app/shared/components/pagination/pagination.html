@@ -1,0 +1,35 @@
+<div class="flex items-center justify-between text-sm text-text-muted">
+  <p>Mostrando {{ rangeStart() }} a {{ rangeEnd() }} de {{ totalItems() }} datos</p>
+
+  <div class="flex items-center gap-2">
+    <span>{{ currentPage() }} de {{ totalPages() }} páginas</span>
+
+    <button
+      type="button"
+      (click)="goToPrevious()"
+      [disabled]="currentPage() === 1"
+      class="flex h-8 w-8 items-center justify-center rounded-md border border-border cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+      aria-label="Página anterior"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    <span class="flex h-8 w-8 items-center justify-center rounded-md bg-primary-light font-semibold text-primary">
+      {{ currentPage() }}
+    </span>
+
+    <button
+      type="button"
+      (click)="goToNext()"
+      [disabled]="currentPage() === totalPages()"
+      class="flex h-8 w-8 items-center justify-center rounded-md border border-border cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+      aria-label="Página siguiente"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+  </div>
+</div>

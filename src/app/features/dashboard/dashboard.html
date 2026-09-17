@@ -1,0 +1,80 @@
+@if (data(); as dashboard) {
+  <h1 class="text-lg font-bold text-primary">Dashboard</h1>
+
+  <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    @for (kpi of dashboard.kpis; track kpi.label) {
+      <div class="rounded-lg border border-border bg-surface p-5">
+        <p class="text-sm text-text-muted">{{ kpi.label }}</p>
+        <p class="mt-2 text-xl font-bold text-text">{{ kpi.value }}</p>
+        <div class="mt-2 flex items-center gap-2 text-xs">
+          <app-tag [variant]="variantFor(kpi)" size="sm">{{ kpi.change }}</app-tag>
+          <span class="text-text-muted">{{ kpi.note }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <p class="mt-6 text-lg font-bold text-primary">Historial de ventas</p>
+  <div class="mt-2 rounded-lg border border-border bg-surface p-5">
+    <div class="flex items-center justify-between text-xs font-semibold text-text">
+      <span>Total libre (GB)</span>
+      <span>% Libre (GB)</span>
+    </div>
+    <div class="mt-2 h-64">
+      @if (areaChartData(); as chartData) {
+        <canvas baseChart [data]="chartData" [options]="areaChartOptions" type="line"></canvas>
+      }
+    </div>
+  </div>
+
+  <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div>
+      <p class="text-lg font-bold text-primary">Historial de ventas</p>
+      <div class="mt-2 rounded-lg border border-border bg-surface p-5">
+        <div class="flex items-center gap-6">
+          <div class="h-36 w-36 shrink-0">
+            @if (donutChartData(); as chartData) {
+              <canvas baseChart [data]="chartData" [options]="donutChartOptions" type="doughnut"></canvas>
+            }
+          </div>
+          <div class="flex flex-1 flex-wrap justify-evenly gap-6">
+            @for (item of donutLegend(); track item.label) {
+              <div>
+                <p class="text-sm text-text-muted">{{ item.label }}</p>
+                <p class="mt-1 text-lg font-bold text-text">{{ item.value }}%</p>
+                <p class="text-sm text-text-muted">{{ item.amount }}</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="text-lg font-bold text-primary">Historial de ventas</p>
+      <div class="mt-2 rounded-lg border border-border bg-surface p-5">
+        <div class="flex flex-col gap-6">
+          @for (referral of dashboard.referrals; track $index) {
+            <div>
+              <div class="flex items-center justify-between text-sm">
+                <div>
+                  <p class="font-semibold text-text">{{ referral.value }}</p>
+                  <p class="text-xs text-text-muted">{{ referral.label }}</p>
+                </div>
+                <span class="font-semibold text-text">{{ referral.percentage }}%</span>
+              </div>
+              <div class="mt-2 h-3 w-full overflow-hidden rounded-full bg-border">
+                <div
+                  class="h-full rounded-full"
+                  [class.bg-success]="referral.color === 'success'"
+                  [class.bg-info]="referral.color === 'info'"
+                  [style.width.%]="referral.percentage"
+                ></div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}

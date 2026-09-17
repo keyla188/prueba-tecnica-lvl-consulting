@@ -1,0 +1,9 @@
+<button
+  [type]="type()"
+  [disabled]="disabled()"
+  class="inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+  [class]="variantClasses"
+  [class.w-full]="fullWidth()"
+>
+  <ng-content />
+</button>

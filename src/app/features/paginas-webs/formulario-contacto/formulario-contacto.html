@@ -1,0 +1,69 @@
+<form [formGroup]="form">
+  <div>
+    <app-input
+      label="Nombre de formulario"
+      placeholder="Introducir nombre del formulario"
+      formControlName="name"
+      [required]="true"
+      [errorMessage]="errorFor('name', { required: 'Este campo es obligatorio' })"
+    />
+  </div>
+
+  <div class="mt-5">
+    <p class="font-semibold text-black">Administrador</p>
+    <p class="text-sm text-text">Seleccione los campos que desea incluir en el formulario de contacto.</p>
+  </div>
+
+  <div class="mt-3">
+    <div class="grid grid-cols-[1fr_auto_auto] items-center gap-x-6 gap-y-3">
+      <span class="text-sm text-text">Campo</span>
+      <span class="text-sm text-text">Mostrar</span>
+      <span class="text-sm text-text">Obligatorio</span>
+
+      @for (field of fields(); track field.key) {
+        <span class="text-sm text-text">{{ field.label }}</span>
+        <app-checkbox
+          [ariaLabel]="'Mostrar: ' + field.label"
+          [ngModel]="field.show"
+          [ngModelOptions]="{ standalone: true }"
+          (ngModelChange)="toggleShow(field.key, $event)"
+        />
+        <app-toggle
+          [ariaLabel]="'Obligatorio: ' + field.label"
+          [ngModel]="field.required"
+          [ngModelOptions]="{ standalone: true }"
+          (ngModelChange)="toggleRequired(field.key, $event)"
+        />
+      }
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <app-input
+      label="Mensaje de agradecimiento"
+      formControlName="thankYouMessage"
+      [required]="true"
+      [errorMessage]="errorFor('thankYouMessage', { required: 'Este campo es obligatorio' })"
+    />
+  </div>
+
+  <div class="mt-5 flex items-center justify-between">
+    <p class="font-medium text-text">Términos y condiciones personalizados</p>
+    <app-toggle [ngModel]="customTerms()" [ngModelOptions]="{ standalone: true }" (ngModelChange)="customTerms.set($event)" />
+  </div>
+
+  @if (customTerms()) {
+    <div class="mt-3">
+      <app-input
+        placeholder="https:// Añadir enlace"
+        formControlName="termsUrl"
+        [required]="true"
+        [errorMessage]="errorFor('termsUrl', { required: 'Ingresa el enlace de tus términos y condiciones' })"
+      />
+    </div>
+  }
+</form>
+
+<app-button [fullWidth]="true" class="mt-6 block" [disabled]="loading()" (click)="onSubmit()">
+  {{ loading() ? 'Creando formulario...' : 'Crear formulario' }}
+</app-button>

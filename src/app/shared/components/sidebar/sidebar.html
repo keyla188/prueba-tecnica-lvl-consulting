@@ -1,0 +1,171 @@
+@if (mobileOpen()) {
+  <button
+    type="button"
+    class="fixed inset-0 z-40 cursor-default bg-[#222222]/50 lg:hidden"
+    (click)="mobileClose.emit()"
+    aria-label="Cerrar menú"
+  ></button>
+}
+
+<aside class="relative z-50 flex h-full flex-col bg-sidebar">
+  <div class="flex items-center justify-between px-5 py-5" [class.justify-center]="collapsed()">
+    @if (!collapsed()) {
+      <img src="/images/logo-lvl-consulting.svg" alt="LVL Consulting" class="h-6" />
+    }
+
+    <button type="button" class="hidden text-text-muted lg:block" aria-label="Colapsar menú" (click)="toggleCollapse()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <button type="button" class="text-text-muted lg:hidden" aria-label="Cerrar menú" (click)="mobileClose.emit()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+  </div>
+
+  @if (!collapsed()) {
+    <p class="px-5 text-xs text-text-muted">Menu</p>
+  }
+
+  <nav class="mt-2 flex flex-col gap-1 px-3">
+    @for (item of menuItems; track item.label) {
+      @if (item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive
+          #dashboardLink="routerLinkActive"
+          [routerLinkActiveOptions]="{ exact: false }"
+          class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-primary-light"
+          [class.bg-primary-light]="dashboardLink.isActive"
+          [class.font-semibold]="dashboardLink.isActive"
+          [class.text-primary]="dashboardLink.isActive"
+          [class.text-text]="!dashboardLink.isActive"
+          [class.justify-center]="collapsed()"
+        >
+          <ng-container *ngTemplateOutlet="itemIcon; context: { $implicit: item.icon }" />
+          @if (!collapsed()) {
+            <span class="flex-1">{{ item.label }}</span>
+          }
+        </a>
+      } @else if (item.children) {
+        <button
+          type="button"
+          (click)="toggleExpand(item.label)"
+          class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-text hover:bg-primary-light"
+          [class.justify-center]="collapsed()"
+        >
+          <ng-container *ngTemplateOutlet="itemIcon; context: { $implicit: item.icon }" />
+          @if (!collapsed()) {
+            <span class="flex-1 text-left">{{ item.label }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 shrink-0 transition-transform"
+              [class.rotate-90]="expandedItem() === item.label"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          }
+        </button>
+
+        @if (!collapsed() && expandedItem() === item.label) {
+          <div class="ml-4 flex flex-col gap-1 border-l border-border pl-4">
+            @for (child of item.children; track child.label) {
+              @if (child.route) {
+                <a
+                  [routerLink]="child.route"
+                  routerLinkActive
+                  #childLink="routerLinkActive"
+                  [routerLinkActiveOptions]="{ exact: false }"
+                  class="rounded-lg px-3 py-2.5 text-sm hover:bg-primary-light"
+                  [class.bg-primary-light]="childLink.isActive"
+                  [class.font-semibold]="childLink.isActive"
+                  [class.text-primary]="childLink.isActive"
+                  [class.text-text]="!childLink.isActive"
+                >
+                  {{ child.label }}
+                </a>
+              } @else {
+                <span class="px-3 py-2.5 text-sm text-text">{{ child.label }}</span>
+              }
+            }
+          </div>
+        }
+      } @else {
+        <div
+          class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-text"
+          [class.justify-center]="collapsed()"
+        >
+          <ng-container *ngTemplateOutlet="itemIcon; context: { $implicit: item.icon }" />
+          @if (!collapsed()) {
+            <span class="flex-1">{{ item.label }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          }
+        </div>
+      }
+    }
+  </nav>
+</aside>
+
+<ng-template #itemIcon let-icon>
+  <span class="shrink-0">
+    @switch (icon) {
+      @case ('dashboard') {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        </svg>
+      }
+      @case ('clipboard') {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="6" y="4" width="12" height="17" rx="2" />
+          <path d="M9 4V3a1 1 0 011-1h4a1 1 0 011 1v1" />
+          <path d="M9 11h6M9 15h6" stroke-linecap="round" />
+        </svg>
+      }
+      @case ('apps') {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V9z" />
+          <path d="M14 3v6h6" />
+          <path d="M9 13h6M9 17h6" stroke-linecap="round" />
+        </svg>
+      }
+      @case ('monitor') {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="4" width="18" height="12" rx="2" />
+          <path d="M8 21h8M12 16v5" stroke-linecap="round" />
+        </svg>
+      }
+      @case ('server') {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="4" width="18" height="6" rx="1.5" />
+          <rect x="3" y="14" width="18" height="6" rx="1.5" />
+          <circle cx="7" cy="7" r="0.8" fill="currentColor" stroke="none" />
+          <circle cx="7" cy="17" r="0.8" fill="currentColor" stroke="none" />
+        </svg>
+      }
+      @case ('store') {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M6 8h12l-1 12a2 2 0 01-2 2H9a2 2 0 01-2-2L6 8z" />
+          <path d="M9 8V6a3 3 0 016 0v2" />
+        </svg>
+      }
+      @case ('info') {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 11v5M12 8h.01" stroke-linecap="round" />
+        </svg>
+      }
+    }
+  </span>
+</ng-template>

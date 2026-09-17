@@ -1,0 +1,99 @@
+<header class="flex h-full items-stretch justify-between bg-surface">
+  <div class="flex min-w-0 items-center gap-3 px-4 sm:px-6">
+    <button
+      type="button"
+      class="text-text-muted lg:hidden"
+      aria-label="Abrir menú"
+      (click)="menuClick.emit()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <div class="min-w-0">
+      <p class="truncate font-medium text-text">¡Te damos la bienvenida {{ username() }}!</p>
+      <p class="hidden text-sm text-text-muted sm:block">{{ today | date: "EEEE, d 'de' MMMM, y" }}</p>
+    </div>
+  </div>
+
+  <div class="flex items-stretch">
+    <div class="flex items-center gap-3 px-4 sm:gap-5 sm:px-6">
+      <button type="button" class="flex items-center gap-1 text-sm text-text">
+        <span>🇪🇸</span>
+        <span class="hidden md:inline">Español</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+
+      <button type="button" aria-label="Aplicaciones" class="hidden text-text-muted sm:block">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="4" y="4" width="6" height="6" rx="1" />
+          <rect x="14" y="4" width="6" height="6" rx="1" />
+          <rect x="4" y="14" width="6" height="6" rx="1" />
+          <rect x="14" y="14" width="6" height="6" rx="1" />
+        </svg>
+      </button>
+
+      <button type="button" aria-label="Notificaciones" class="text-text-muted">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M13.73 21a2 2 0 01-3.46 0" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      <button type="button" aria-label="Configuración" class="hidden text-text-muted sm:block">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="relative flex items-stretch">
+      <button
+        type="button"
+        (click)="toggleUserMenu()"
+        class="flex h-full items-center gap-3 border-l border-border bg-sidebar px-3 sm:px-6"
+      >
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-light text-sm font-semibold text-primary">
+          {{ username().charAt(0).toUpperCase() }}
+        </div>
+        <div class="hidden text-left sm:block">
+          <p class="text-sm font-semibold text-text">{{ username() }}</p>
+          <p class="text-xs text-text-muted">LVL Consulting</p>
+        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 shrink-0 text-text-muted transition-transform"
+          [class.rotate-180]="isUserMenuOpen()"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+
+      @if (isUserMenuOpen()) {
+        <button type="button" class="fixed inset-0 z-40 cursor-default" (click)="closeUserMenu()" aria-label="Cerrar menú"></button>
+
+        <div class="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-lg border border-border bg-surface py-1 shadow-lg">
+          <button
+            type="button"
+            (click)="logout()"
+            class="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-danger hover:bg-danger-light"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M16 17l5-5-5-5M21 12H9" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Cerrar sesión
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</header>

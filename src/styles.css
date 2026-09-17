@@ -1,3 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+@theme {
+  --color-primary: #092083;       /* azul marino oscuro (sidebar logo, botones, títulos) */
+  --color-primary-hover: #14264a;
+  --color-primary-light: #E6EFFB; /* fondo del item activo del sidebar */
+
+  --color-surface: #FFFFFF;       /* cards, topbar */
+  --color-background: #FFFFFF;    /* fondo general del layout autenticado */
+  --color-sidebar: #FAFCFF;       /* fondo del sidebar */
+
+  --color-text: #545A6D;
+  --color-text-muted: #6b7280;
+  --color-border: #E9E9EF;
+
+  --color-success: #2AB57D;       /* +S/50k, tag "Documento" */
+  --color-danger: #F54541;        /* -30 clientes, -S/50k */
+  --color-warning: #E77001;       /* tag "Imágenes" */
+  --color-info: #5589CD;          /* tag "Videos" */
+
+  --color-success-light: #D6FBEF;
+  --color-danger-light: #FED7D6;
+  --color-warning-light: #FFF6E5;
+  --color-info-light: #ECF4FF;
+}

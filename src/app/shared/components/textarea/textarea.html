@@ -1,0 +1,30 @@
+<div>
+  @if (label()) {
+    <label [for]="textareaId" class="block text-sm text-text">
+      {{ label() }}
+      @if (required()) {
+        <span class="text-danger">*</span>
+      }
+    </label>
+  }
+
+  <textarea
+    [id]="textareaId"
+    [placeholder]="placeholder()"
+    [required]="required()"
+    [disabled]="disabled()"
+    [rows]="rows()"
+    [value]="value()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    class="w-full resize-none rounded-sm border px-4 py-2.5 text-sm outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+    [class.mt-2]="label()"
+    [class.border-border]="!errorMessage()"
+    [class.focus:border-primary]="!errorMessage()"
+    [class.border-danger]="errorMessage()"
+  ></textarea>
+
+  @if (errorMessage()) {
+    <p class="mt-1 text-xs text-danger">{{ errorMessage() }}</p>
+  }
+</div>

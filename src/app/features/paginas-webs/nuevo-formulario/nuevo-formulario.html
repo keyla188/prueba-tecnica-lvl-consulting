@@ -1,0 +1,111 @@
+<div class="flex items-center justify-between">
+  <div>
+    <h1 class="text-lg font-bold text-primary">Nueva categoría</h1>
+    <p class="text-sm text-text-muted">Complete sus datos y continúe con los siguientes pasos.</p>
+  </div>
+
+  <app-button (click)="onSubmit()" [disabled]="loading() || isUploading()">
+    <span class="flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+        <path d="M17 21v-8H7v8M7 3v5h8" />
+      </svg>
+      {{ loading() ? 'Guardando...' : 'Guardar' }}
+    </span>
+  </app-button>
+</div>
+
+<div class="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+  <form [formGroup]="form" class="rounded-lg border border-border bg-surface p-5">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <app-input
+        label="Nombre de categoría"
+        placeholder="Introducir la categoría"
+        formControlName="name"
+        [required]="true"
+        [errorMessage]="errorFor('name', { required: 'Este campo es obligatorio' })"
+      />
+      <app-input
+        label="Subtítulo"
+        placeholder="Introducir la categoría"
+        formControlName="subtitle"
+        [required]="true"
+        [errorMessage]="errorFor('subtitle', { required: 'Este campo es obligatorio' })"
+      />
+    </div>
+
+    <div class="mt-4">
+      <app-select
+        label="Empresa"
+        formControlName="company"
+        [required]="true"
+        [errorMessage]="errorFor('company', { required: 'Selecciona una empresa' })"
+      >
+        <option value="" disabled>Seleccionar una empresa</option>
+        @for (company of companies; track company) {
+          <option [value]="company">{{ company }}</option>
+        }
+      </app-select>
+    </div>
+
+    <div class="mt-4">
+      <app-select label="Tipo de recurso" formControlName="type">
+        <option value="" disabled>Seleccionar tipo de recurso</option>
+        @for (type of types; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </app-select>
+    </div>
+
+    <div class="mt-4">
+      <app-textarea
+        label="Descripción"
+        placeholder="Escribe una descripción para la categoría"
+        formControlName="description"
+        [rows]="8"
+      />
+    </div>
+  </form>
+
+  <div
+    class="flex flex-col rounded-lg border border-border bg-sidebar p-5"
+    [class.border-primary]="isDragging()"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave()"
+    (drop)="onDrop($event)"
+  >
+    <p class="font-medium text-text">Imagen</p>
+
+    <div class="flex flex-1 flex-col items-center justify-center gap-4">
+      @if (imageUrl()) {
+        <img [src]="imageUrl()" alt="" class="h-24 w-24 rounded-lg object-cover" />
+      } @else if (isUploading()) {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 animate-spin text-primary/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 3a9 9 0 100 18 9 9 0 000-18z" stroke-opacity="0.3" />
+          <path d="M12 3a9 9 0 019 9" stroke-linecap="round" />
+        </svg>
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-primary/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M4 5a2 2 0 012-2h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" stroke-linejoin="round" />
+          <circle cx="9" cy="10" r="1.5" />
+          <path d="M20 16l-5-5a1.5 1.5 0 00-2.1 0l-7.4 7.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      }
+
+      <label class="cursor-pointer">
+        <input type="file" accept="image/*" class="hidden" [disabled]="isUploading()" (change)="onFileSelected($event)" />
+        <app-button type="button" [disabled]="isUploading()">
+          {{ isUploading() ? 'Subiendo...' : 'Seleccionar imagen' }}
+        </app-button>
+      </label>
+
+      <p class="text-xs text-text-muted">
+        {{ fileName() ?? 'o arrastra y suelta una imagen aquí' }}
+      </p>
+
+      @if (uploadError()) {
+        <p class="text-xs text-danger">{{ uploadError() }}</p>
+      }
+    </div>
+  </div>
+</div>
