@@ -1,0 +1,45 @@
+{
+  "kpis": [
+    {
+      "label": "Ingresos",
+      "value": "S/ 460.00",
+      "change": "+ S/50k",
+      "changeType": "positive",
+      "note": "Desde el mes pasado"
+    },
+    {
+      "label": "Número de clientes",
+      "value": "4789",
+      "change": "- 30 clientes",
+      "changeType": "negative",
+      "note": "Desde el mes pasado"
+    },
+    {
+      "label": "Inversión realizada",
+      "value": "S/ 5460.00k",
+      "change": "+ S/32k",
+      "changeType": "positive",
+      "note": "Desde el mes pasado"
+    },
+    {
+      "label": "Relación de ganancia",
+      "value": "S/ 460.00",
+      "change": "- S/50k",
+      "changeType": "negative",
+      "note": "Desde el mes pasado"
+    }
+  ],
+  "salesHistory": {
+    "labels": ["Lunes", "", "Martes", "", "Miércoles", "", "Jueves", "", "Viernes", "", "Sábado", "", "Domingo", ""],
+    "values": [62, 70, 92, 38, 88, 82, 98, 60, 40, 25, 78, 72, 65, 65]
+  },
+  "salesByPeriod": {
+    "labels": ["Anual", "Mensual", "Semanal", "Diario"],
+    "values": [100, 60, 20, 30],
+    "amount": "S/4500"
+  },
+  "referrals": [
+    { "label": "Referidos", "value": 1024, "percentage": 87, "color": "success" },
+    { "label": "Referidos", "value": 1024, "percentage": 87, "color": "info" }
+  ]
+}

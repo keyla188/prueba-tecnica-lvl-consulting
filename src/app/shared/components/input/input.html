@@ -1,0 +1,52 @@
+<div>
+  @if (label()) {
+    <label [for]="inputId" class="block text-sm text-text">
+      {{ label() }}
+      @if (required()) {
+        <span class="text-danger">*</span>
+      }
+    </label>
+  }
+
+  <div class="relative" [class.mt-2]="label()">
+    <input
+      [id]="inputId"
+      [type]="resolvedType"
+      [placeholder]="placeholder()"
+      [required]="required()"
+      [disabled]="disabled()"
+      [value]="value()"
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+      class="w-full rounded-sm border px-4 py-2.5 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
+      [class.border-border]="!errorMessage()"
+      [class.focus:border-primary]="!errorMessage()"
+      [class.border-danger]="errorMessage()"
+      [class.pr-10]="type() === 'password'"
+    />
+
+    @if (type() === 'password') {
+      <button
+        type="button"
+        (click)="togglePassword()"
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted"
+        [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+      >
+        @if (showPassword()) {
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 3l18 18M10.58 10.58a2 2 0 002.83 2.83M9.88 4.24A10.94 10.94 0 0112 4c7 0 10 8 10 8a17.9 17.9 0 01-3.15 4.24M6.1 6.1C3.6 7.9 2 10 2 10s3 8 10 8a10.4 10.4 0 004.9-1.19" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        }
+      </button>
+    }
+  </div>
+
+  @if (errorMessage()) {
+    <p class="mt-1 text-xs text-danger">{{ errorMessage() }}</p>
+  }
+</div>

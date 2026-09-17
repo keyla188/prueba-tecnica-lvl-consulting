@@ -1,0 +1,42 @@
+<div>
+  @if (label()) {
+    <label [for]="selectId" class="block text-sm text-text">
+      {{ label() }}
+      @if (required()) {
+        <span class="text-danger">*</span>
+      }
+    </label>
+  }
+
+  <div class="relative" [class.mt-2]="label()">
+    <select
+      [id]="selectId"
+      [required]="required()"
+      [disabled]="disabled()"
+      [value]="value()"
+      (change)="onSelect($event)"
+      (blur)="onBlur()"
+      class="w-full cursor-pointer appearance-none rounded-sm border bg-surface px-4 py-2.5 pr-9 text-sm text-text outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+      [class.border-border]="!errorMessage()"
+      [class.focus:border-primary]="!errorMessage()"
+      [class.border-danger]="errorMessage()"
+    >
+      <ng-content />
+    </select>
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </div>
+
+  @if (errorMessage()) {
+    <p class="mt-1 text-xs text-danger">{{ errorMessage() }}</p>
+  }
+</div>

@@ -1,0 +1,87 @@
+<div class="relative flex min-h-screen items-center justify-center overflow-hidden">
+  <img
+    src="/images/auth-background.png"
+    alt=""
+    class="absolute inset-0 h-full w-full object-cover"
+  />
+  <div class="absolute inset-0 bg-[#222222]/50"></div>
+
+  <div class="relative z-10 w-full max-w-md rounded-2xl bg-surface p-10 shadow-2xl">
+    <h1 class="text-center text-xl font-bold text-primary">Crear cuenta</h1>
+    <p class="mt-1 text-center text-sm text-text-muted">
+      Únete a la comunidad de LVL Consulting
+    </p>
+
+    <form class="mt-6 space-y-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <app-input
+        label="Correo electrónico"
+        type="email"
+        placeholder="Introducir la dirección del correo electrónico"
+        formControlName="email"
+        [required]="true"
+        [errorMessage]="errorFor('email', { required: 'El correo es obligatorio', email: 'Ingresa un correo válido' })"
+      />
+
+      <app-input
+        label="Nombre del usuario"
+        placeholder="Introducir nombre del usuario"
+        formControlName="username"
+        [required]="true"
+        [errorMessage]="errorFor('username', { required: 'El nombre de usuario es obligatorio', minlength: 'Debe tener al menos 3 caracteres' })"
+      />
+
+      <app-input
+        label="Contraseña"
+        type="password"
+        placeholder="Introducir la contraseña"
+        formControlName="password"
+        [required]="true"
+        [errorMessage]="errorFor('password', { required: 'La contraseña es obligatoria', minlength: 'Debe tener al menos 8 caracteres', pattern: 'Debe incluir una mayúscula, una minúscula y un número' })"
+      />
+
+      <p class="text-sm text-text-muted">
+        Al registrarte aceptas los
+        <a href="#" class="text-primary underline">Términos de uso de LVL Consulting</a>
+      </p>
+
+      <app-button type="submit" [fullWidth]="true" [disabled]="loading()">
+        {{ loading() ? 'Creando cuenta...' : 'Crear cuenta' }}
+      </app-button>
+    </form>
+
+    <div class="my-6 flex items-center gap-3">
+      <span class="h-px flex-1 bg-border"></span>
+      <span class="text-sm text-text-muted">Crear cuenta con</span>
+      <span class="h-px flex-1 bg-border"></span>
+    </div>
+
+    <div class="flex justify-center gap-3">
+      <button
+        type="button"
+        class="flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-surface"
+        aria-label="Continuar con Google"
+      >
+        <img src="/images/google.svg" alt="" class="h-5 w-5" />
+      </button>
+      <button
+        type="button"
+        class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#3b5998]"
+        aria-label="Continuar con Facebook"
+      >
+        <img src="/images/facebook.svg" alt="" class="h-5 w-5" />
+      </button>
+      <button
+        type="button"
+        class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#E77001]"
+        aria-label="Continuar con Adobe"
+      >
+        <img src="/images/adobe.svg" alt="" class="h-5 w-5" />
+      </button>
+    </div>
+
+    <p class="mt-6 text-center text-sm text-text-muted">
+      ¿Ya tienes cuenta?
+      <a routerLink="/auth/login" class="text-primary underline">Iniciar sesión</a>
+    </p>
+  </div>
+</div>
